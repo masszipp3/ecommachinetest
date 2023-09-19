@@ -1,0 +1,70 @@
+{% extends 'shopadmin/index.html' %}
+{% load static %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block nav %}
+<div class="navbar-nav w-100">
+    <a href="{% url 'shop_admin:home' %}" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+    <a href="{% url 'shop_admin:products' %}" class="nav-item nav-link "><i class="fa fa-th me-2"></i>Products</a>
+    <a href="{% url 'shop_admin:categories' %}" class="nav-item nav-link active"><i class="fa fa-keyboard me-2"></i>Categories</a>
+    <a href="{% url 'shop_admin:orders' %}" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Orders</a>
+    
+</div>
+
+{% endblock %}
+
+{% block home %}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-12 col-xl-12">
+            <div class="bg-light rounded h-100 p-4">
+                <h6 class="mb-4">Edit Category</h6>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Category Name</label>
+                        <input type="text" class="form-control" value="{{ catdata.category_name }}" name="category_name" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.
+                                    </div> -->
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Category ID</label>
+                        <input type="text" value="{{ catdata.category_ID }}"a class="form-control" name="category_ID" id="exampleInputPassword1">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">slug</label>
+                        <input type="text" value="{{ catdata.slug }}" class="form-control" name="slug" id="exampleInputPassword1">
+                    </div>
+                    <div class="mb-3">
+                        <label for="floatingTextarea">Description</label>
+                        <textarea class="form-control" value="" name="category_description" placeholder="Description" id="floatingTextarea"
+                            style="height: 150px;">{{ catdata.category_description }}</textarea>
+                      
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="formFile" class="form-label"></label>Select Category Image
+                        <input class="form-control" name="category_image" type="file" id="formFile">
+                    </div>
+
+                   
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                    </div>
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+{% endblock %}
+
+{% block bodyened %}
+
+{% endblock %}

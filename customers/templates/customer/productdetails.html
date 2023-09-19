@@ -1,0 +1,163 @@
+{% extends 'customer/index.html' %}
+{% load static %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block products %}
+
+<section class="section-content padding-y bg">
+    <div class="container">
+
+        <!-- ============================ COMPONENT 1 ================================= -->
+        <div class="card">
+            <div class="row no-gutters">
+                <aside class="col-md-6">
+                    <article class="gallery-wrap">
+                        <div class="img-big-wrap">
+                            <a href="#"><img src="{{product.product_image.url}}"></a>
+                        </div> <!-- img-big-wrap.// -->
+
+                    </article> <!-- gallery-wrap .end// -->
+                </aside>
+                <main class="col-md-6 border-left">
+                    <article class="content-body">
+
+                        <h2 class="title">{{product.Product_name}}</h2>
+
+                        <div class="mb-3">
+                            <var class="price h4">${{product.Price}}</var>
+                        </div>
+
+                        <p>{{product.Description }}</p>
+
+
+                        <hr>
+
+                        <hr>
+                        {% if not exists %}
+                        <a class="btn  btn-primary cartbtn" data-url="{% url 'customers:addtocart' %}"
+                            data-productid="{{product.id}}" data-profile="{{product.product_image.url}}"
+                            data-product_name="{{product.Product_name}}" data-price="{{product.Price}}"> <span
+                                class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i> </a>
+                        {% else %}
+                        <a href="{% url 'customers:mycart' %}" class="btn btn-block btn-success viewcart">View Cart </a>
+                        {% endif %}
+                        <a href="{% url 'customers:mycart' %}" class="btn btn-block btn-success viewcart" style="display: none;">View Cart </a>
+
+                    </article> <!-- product-info-aside .// -->
+                </main> <!-- col.// -->
+            </div> <!-- row.// -->
+        </div> <!-- card.// -->
+        <!-- ============================ COMPONENT 1 END .// ================================= -->
+
+        <br>
+
+        <div class="row">
+            <div class="col-md-9">
+
+                <header class="section-heading">
+                    <h3>Customer Reviews </h3>
+
+                </header>
+
+                {% if not myreview %} 
+                <article class="box mb-3">
+                   
+                    <h3>Rate the Product</h3>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="icontext w-100 d-flex  " id="stars" style="justify-content: center;">
+                            <br>
+                            <span class="fa fa-star" style="font-size: 20px;"></span>
+                            <span class="fa fa-star" style="font-size: 20px;"></span>
+                            <span class="fa fa-star" style="font-size: 20px;"></span>
+                            <span class="fa fa-star" style="font-size: 20px;"></span>
+                            <span class="fa fa-star" style="font-size: 20px;"></span><br>
+
+                        </div> <br>
+                        <input type="hidden" name="rating" value="0" id="rating">
+                        <div style="display: flex; justify-content: center;"><!-- icontext.// -->
+                            <input type="text" placeholder="Enter your review"
+                                style="display: block; height: 200px; width: 50%;" name="review">
+                                
+                        </div><br>
+                        {% if review %}
+                        <div class="d-flex" style="justify-content: center;">
+                            <button class="btn btn-primary" type="submit">Save</button>
+                        
+                        </div>
+                        {% else %}
+                        <div class="alert alert-warning" role="alert">
+                           Order theproduct to post your review
+                          </div>
+                          {% endif %}
+                        
+                    </form>
+                </article>
+                {% else %}
+                <article class="box mb-3">
+                    {% for i in myreview %}
+                    <div class="icontext w-100">
+                        <img src="{% static 'images/avatars/avatar1.jpg' %}" align="center" class="img-xs icon rounded-circle">
+                        <div class="text">
+                            <!-- <span>24.04.2020 </span> -->
+                            <button class="date text-muted float-md-right">edit</button>
+                            <h6 class="mb-1">Your Review </h6>
+                            <span class="fa fa-star {% if i.rating > 0 %} checked {% endif %}"></span>
+                            <span class="fa fa-star {% if i.rating > 1 %} checked {% endif %}"></span>
+                            <span class="fa fa-star {% if i.rating > 2 %} checked {% endif %}"></span>
+                            <span class="fa fa-star {% if i.rating > 3 %} checked {% endif %}"></span>
+                            <span class="fa fa-star {% if i.rating > 4 %} checked {% endif %}"></span>
+                        </div>
+                    </div> <!-- icontext.// -->
+                    <div class="mt-3">
+                        <p>
+                            {{i.review}}
+                        </p>
+                        
+                    </div>
+
+                </article>
+                {% endfor %}
+                {% endif %}
+
+                {% for i in allreviews %}
+
+                <article class="box mb-3">
+                    <div class="icontext w-100">
+                        <img src="{% static 'images/avatars/avatar1.jpg' %}" class="img-xs icon rounded-circle">
+                        <div class="text">
+                            <span class="date text-muted float-md-right">24.04.2020 </span>
+                            <h6 class="mb-1">{{i.customer.user.username}} </h6>
+                            <span class="fa fa-star {% if i.rating > 0 %} checked {% endif %}"></span>
+                            <span class="fa fa-star {% if i.rating > 1 %} checked {% endif %}"></span>
+                            <span class="fa fa-star {% if i.rating > 2 %} checked {% endif %}"></span>
+                            <span class="fa fa-star {% if i.rating > 3 %} checked {% endif %}"></span>
+                            <span class="fa fa-star {% if i.rating > 4 %} checked {% endif %}"></span>
+                        </div>
+                    </div> <!-- icontext.// -->
+                    <div class="mt-3">
+                        <p>
+                            {{i.review}}
+                        </p>
+                    </div>
+                </article>
+                {% endfor %}
+
+
+
+
+            </div> <!-- col.// -->
+        </div> <!-- row.// -->
+
+
+    </div> <!-- container .//  -->
+</section>
+
+{% endblock %}
+
+{% block bodyend %}
+
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends 'customer/index.html' %}
+{% load static %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block products %}
+
+<section class="section-pagetop bg">
+<div class="container">
+	<h2 class="title-page">Our Store</h2>
+	
+</div> <!-- container //  -->
+</section>
+<!-- ========================= SECTION INTRO END// ========================= -->
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-content padding-y">
+<div class="container">
+
+<div class="row">
+	<aside class="col-md-3">
+		
+<div class="card">
+	<article class="filter-group">
+		<header class="card-header">
+			<a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
+				<i class="icon-control fa fa-chevron-down"></i>
+				<h6 class="title">Categories</h6>
+			</a>
+		</header>
+		<div class="filter-content collapse show" id="collapse_1" style="">
+			<div class="card-body">
+				
+				<ul class="list-menu">
+				{% for category in category_list %}
+				<li><a href="#">{{category.category_name}} </a></li>
+                {% endfor %}
+				</ul>
+
+			</div> <!-- card-body.// -->
+		</div>
+	</article> <!-- filter-group  .// -->
+	
+	
+</div> <!-- card.// -->
+
+	</aside> <!-- col.// -->
+	<main class="col-md-9">
+
+<header class="border-bottom mb-4 pb-3">
+		<div class="form-inline">
+			<span class="mr-md-auto">32 Items found </span>
+			
+		</div>
+</header><!-- sect-heading -->
+
+<div class="row">
+    {% for product in product_list %}
+	<div class="col-md-4">
+		<figure class="card card-product-grid">
+			<div class="img-wrap"> 
+				
+				<img src="{{product.product_image.url}}">
+				
+			</div> <!-- img-wrap.// -->
+			<figcaption class="info-wrap">
+				<div class="fix-height" style="height: 150px;">
+					<a href="{% url 'customers:productsdetials' product.slug %}" class="title">{{product.Product_name}}</a>
+					<div class="price-wrap mt-2">
+						<span class="price"> ${{product.Price}}</span>
+						<del class="price-old">$ {{product.Price}}</del>
+					</div> <!-- price-wrap.// -->
+				</div>
+               
+				
+                {% if product.id in cartitems %}
+                <a href="{% url 'customers:mycart' %}" class="btn btn-block btn-success viewcart">View Cart </a>
+                {% else %}
+				<a class="btn btn-block btn-primary cartbtn" data-url="{% url 'customers:addtocart' %}" data-productid="{{product.id}}" data-profile="{{product.product_image.url}}" data-product_name="{{product.Product_name}}" data-price="{{product.Price}}">Add to cart </a>
+               {% endif %}
+                <a href="{% url 'customers:mycart' %}" class="btn btn-block btn-success viewcart" style="display: none;" >View Cart </a>
+
+
+			</figcaption>
+		</figure>
+	</div> 
+    <!-- col.// -->
+
+    {% endfor %}
+
+	 <!-- col.// -->
+</div> <!-- row end.// -->
+
+
+
+<nav class="mt-4" aria-label="Page navigation sample">
+ 
+    {% if product_list.has_previous %}
+    <a class="previous-page" href="?page={{ product_list.previous_page_number }}">previous</a>
+{% endif %}
+
+<span class="current-page">{{ product_list.number }}</span>
+
+{% if product_list.has_next %}
+    <a class="next-page" href="?page={{ product_list.next_page_number }}">next</a>
+{% endif %}
+  
+</nav>
+
+	</main> <!-- col.// -->
+
+</div>
+
+</div> <!-- container .//  -->
+</section>
+
+{% endblock %}
+
+{% block bodyend %}
+
+{% endblock %}

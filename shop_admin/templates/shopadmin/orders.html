@@ -1,0 +1,120 @@
+{% extends 'shopadmin/index.html' %}
+{% load static %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block nav %}
+<div class="navbar-nav w-100">
+    <a href="{% url 'shop_admin:home' %}" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+    <a href="{% url 'shop_admin:products' %}" class="nav-item nav-link "><i class="fa fa-th me-2"></i>Products</a>
+    <a href="{% url 'shop_admin:categories' %}" class="nav-item nav-link "><i class="fa fa-keyboard me-2"></i>Categories</a>
+    <a href="{% url 'shop_admin:orders' %}" class="nav-item nav-link active"><i class="fa fa-table me-2"></i>Orders</a>
+    
+</div>
+
+{% endblock %}
+
+{% block home %}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Orders</h6>
+
+        </div>
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                <thead>
+                    <tr class="text-dark">
+                        <th scope="col">SL No</th>
+                        <th scope="col">Order ID</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Customer</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                                    <td>{{order.OrderId}}</td>
+                                    <td>{{order.created_at}}</td>
+                                    <td>{{order.user.user.username}}</td>
+                                    <td>{{order.status}}</td>
+                                    <td>{{order.total_price}}</td>
+                                    
+                                    <td><a class="btn btn-sm btn-primary" href="{% url 'shop_admin:orderdetails' order.OrderId %}">View Details</a>
+                                    </td>
+                    </tr>
+                    {% endfor %}
+                    <!-- <tr>
+                        <td>02</td>
+                        <td>01 Jan 2045</td>
+                        <td>INV-0123</td>
+                        <td>Jhon Doe</td>
+                        <td>$123</td>
+                      
+                        <td><a class="btn btn-sm btn-primary" href="">Edit</a>
+                            <a class="btn btn-sm btn-danger" href="">Delete</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>03</td>
+                        <td>01 Jan 2045</td>
+                        <td>INV-0123</td>
+                        <td>Jhon Doe</td>
+                        <td>$123</td>
+               
+                        <td><a class="btn btn-sm btn-primary" href="">Edit</a>
+                            <a class="btn btn-sm btn-danger" href="">Delete</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>04</td>
+                        <td>01 Jan 2045</td>
+                        <td>INV-0123</td>
+                        <td>Jhon Doe</td>
+                        <td>$123</td>
+              
+                        <td><a class="btn btn-sm btn-primary" href="">Edit</a>
+                            <a class="btn btn-sm btn-danger" href="">Delete</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>05</td>
+                        <td>01 Jan 2045</td>
+                        <td>INV-0123</td>
+                        <td>Jhon Doe</td>
+                        <td>$123</td>
+        
+                        <td><a class="btn btn-sm btn-primary" href="">Edit</a>
+                            <a class="btn btn-sm btn-danger" href="">Delete</a>
+                        </td>
+                    </tr> -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="pagination">
+    {% if catagories.has_previous %}
+        <a href="?page={{ orders.previous_page_number }}">previous</a>
+    {% endif %}
+
+    <span class="current-page">{{ catagories.number }}</span>
+
+    {% if catagories.has_next %}
+        <a href="?page={{ orders.next_page_number }}">next</a>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block bodyened %}
+
+{% endblock %}

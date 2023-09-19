@@ -1,0 +1,156 @@
+{% extends 'shopadmin/index.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    .checked {
+        color: orange;
+    }
+</style>
+{% endblock %}
+
+{% block nav %}
+<div class="navbar-nav w-100">
+    <a href="{% url 'shop_admin:home' %}" class="nav-item nav-link"><i
+            class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+    <a href="{% url 'shop_admin:products' %}" class="nav-item nav-link active"><i class="fa fa-th me-2"></i>Products</a>
+    <a href="{% url 'shop_admin:categories' %}" class="nav-item nav-link"><i
+            class="fa fa-keyboard me-2"></i>Categories</a>
+    <a href="{% url 'shop_admin:orders' %}" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Orders</a>
+
+</div>
+
+{% endblock %}
+
+{% block home %}
+
+<style>
+    .ordercard {
+        background-color: white;
+        padding: 2%;
+        width: 100%;
+        border-radius: 13px;
+    }
+</style>
+
+<!-- Recent Sales Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Product Details</h6>
+
+
+
+            \
+        </div>
+        <style>
+            .cname {
+                font-weight: 900;
+            }
+
+            .cdet {
+                font-weight: 900;
+                opacity: .7;
+            }
+        </style>
+
+        <img src="{{product.product_image.url}}" width="150px" height="150px" alt="" srcset="">
+        <h6 class="pb-3 pt-2">{{product.Product_ID}}</h6>
+        <div class="ordercard">
+            <div class="row border-bottom align-items-center">
+
+                <p class="col-6 orderdet p-2 cdet">
+                    Product Name
+                </p>
+                <p class=" col-6 orderdet p-2 cname">
+                    {{product.Product_name}}
+                </p>
+            </div>
+            <div class="row border-bottom align-items-center">
+                <p class=" col-6 orderdet p-2 cdet">
+                    Brand
+                </p>
+                <p class="col-6 orderdet cname p-2">
+                    {{product.brand}}
+                </p>
+            </div>
+            <div class="row border-bottom align-items-center">
+                <p class=" col-6 orderdet p-2 cdet">
+                    Stock Status
+                </p>
+                <p
+                    class="col-6 orderdet cname p-2 {% if product.onstock %} text-success  {% else %} text-danger {% endif %}">
+                    {% if product.onstock %}
+                    In Stock
+                    {% else %}
+                    Out of Stock
+                    {% endif %}
+
+
+                </p>
+            </div>
+            <div class="row border-bottom align-items-center">
+                <p class=" col-6 orderdet p-2 cdet">
+                    Price
+                </p>
+                <p class="col-6 orderdet cname p-2 ">
+                    {{product.Price}}
+                </p>
+            </div>
+            <div class="row border-bottom align-items-center">
+                <p class=" col-6 orderdet p-2 cdet">
+                    Catagory
+                </p>
+                <p class="col-6 orderdet cname p-2">
+                    {{product.Product_category.category_name}}
+                </p>
+            </div>
+
+            <div class="row border-bottom align-items-center">
+                <p class=" col-6 orderdet p-2 cdet">
+                    Rating
+                </p>
+                <p class="col-6 orderdet cname p-2">
+                    <span class="fa fa-star {% if avgrating > 0 %} checked {% endif %}"></span>
+                    <span class="fa fa-star {% if avgrating > 1 %} checked {% endif %}"></span>
+                    <span class="fa fa-star {% if avgrating > 2 %} checked {% endif %}"></span>
+                    <span class="fa fa-star {% if avgrating > 3 %} checked {% endif %}"></span>
+                    <span class="fa fa-star {% if avgrating > 4 %} checked {% endif %}"></span>
+
+                </p>
+            </div>
+
+            <div class="row border-bottom align-items-center">
+                <p class=" col-6 orderdet p-2 cdet">
+                    Description
+                </p>
+                <p class="col-6 orderdet cname p-2">
+                    {{product.Description}}
+
+                </p>
+            </div> <br>
+            <div>
+                <a class="btn btn-sm btn-primary"
+                    href="{% url 'shop_admin:editproduct'  product.Product_ID  %}">Edit</a>
+                <a class="btn btn-sm btn-danger" href="{% url 'shop_admin:deleteproduct'  product.id  %}">Delete</a>
+                {% if product.onstock %}
+                <a class="btn btn-sm btn-success" href="{% url 'shop_admin:stockupdate'  product.id  %}">In Stock</a>
+                {% else %}
+                <a class="btn btn-sm btn-danger" href="{% url 'shop_admin:stockupdate'  product.id  %}">Out Of stock</a>
+                {% endif %}
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block bodyened %}
+
+{% endblock %}

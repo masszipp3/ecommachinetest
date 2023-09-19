@@ -1,0 +1,211 @@
+
+
+{% extends 'shopadmin/index.html' %}
+{% load custom_filters %}
+{% load static %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block nav %}
+<div class="navbar-nav w-100">
+    <a href="{% url 'shop_admin:home' %}" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+    <a href="{% url 'shop_admin:products' %}" class="nav-item nav-link active"><i class="fa fa-th me-2"></i>Products</a>
+    <a href="{% url 'shop_admin:categories' %}" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Categories</a>
+    <a href="{% url 'shop_admin:orders' %}" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Orders</a>
+    
+</div>
+
+{% endblock %}
+
+{% block home %}
+
+<style>
+    .ordercard {
+        background-color: white;
+        padding: 2%;
+        width: 100%;
+        border-radius: 13px;
+    }
+</style>
+
+<!-- Recent Sales Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">{{order.OrderId}}</h6>
+       <form action="" class="p-4" method="post">
+        {% csrf_token %}
+            <select name="status">
+                <option value="">Change Status</option>
+                
+                {% for choice in order.STATUS_CHOICES %}
+                    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+        </div>
+        <style>
+            .cname{
+                font-weight: 900;
+            }
+            .cdet{
+                font-weight: 900;
+                opacity: .7;
+            }
+        </style>
+
+        
+        <h6 class="pb-3">ORDER DETAILS</h6>
+        <div class="ordercard">
+            <div class="row border-bottom align-items-center">
+
+                <p class="col-6 orderdet p-2 cdet">
+                    Customer
+                </p>
+                <p class=" col-6 orderdet p-2 cname">
+                    {{order.user.user.username}}
+                </p>
+            </div>
+            <div class="row border-bottom align-items-center">
+                <p class=" col-6 orderdet p-2 cdet" >
+                    Order Date
+                </p>
+                <p class="col-6 orderdet cname p-2">
+                    {{order.created_at}} 
+                </p>
+            </div>
+            <div class="row border-bottom align-items-center">
+              
+            </div>
+            <div class="row border-bottom align-items-center">
+                <p class=" col-6 orderdet p-2 cdet">
+                    Status
+                </p>
+                <p class="col-6 orderdet cname p-2 {% if order.status == 'pending' %} text-warning {% elif order.status == 'Accepted' %} text-success {% else %} text-danger {% endif %}">
+                    {{order.status}} 
+                </p>
+            </div>
+            <div class="row border-bottom align-items-center">
+                
+            </div>
+
+            <div class="row border-bottom align-items-center">
+                <p class=" col-6 orderdet p-2 cdet">
+                    Billing Address
+                </p>
+                <p class="col-6 orderdet cname p-2">
+                    {{order.address.recipient_name}},{{order.address.street_address}},
+                                            {{order.address.city}}, {{order.address.apartment_suite}}, {{order.address.state}}
+                                            ,{{order.address.postal_code}}, {{order.address.phone_number}}
+                    
+                </p>
+            </div>
+
+
+
+        </div>
+
+        <h6 class="p-3">ORDER ITEMS</h6>
+        <div class="ordercard">
+            <div class="row border-bottom align-items-center">
+
+                <div class="col-1 orderdet p-2">
+                    Sl No
+                </div>
+                <div class=" col-1 orderdet p-2">
+
+                 </div>
+                <div class=" col-2 orderdet p-2">
+                   Product
+                </div>
+                <div class="col-2 orderdet p-2">
+                    Product ID
+                </div>
+                <div class=" col-2 orderdet p-2">
+                    Quanity
+                </div>
+                <div class="col-2 orderdet p-2">
+                    Unit Price
+                </div>
+                <div class=" col-2 orderdet p-2">
+                   Total
+                </div>
+            </div>
+            {% for item in orderitems %}
+            <div class="row border-bottom align-items-center">
+
+                <div class="col-1 orderdet p-2">
+                    {{forloop.counter}}
+                </div>
+                <div class=" col-1 orderdet p-2">
+                    <img src="{{item.product.product_image.url}}" width="50px" height="50px" align="left" alt="">
+                  
+                </div>
+                <div class=" col-2 orderdet p-2">
+                   <span>{{item.product.Product_name}} {{item.product.brand}} {{item.product.Min_value}} {{item.product.Unit_type}}</span> 
+                </div>
+                <div class="col-2 orderdet p-2">
+                    {{item.product.Product_ID}}
+                </div>
+                <div class=" col-2 orderdet p-2">
+                    {{item.quantity}}
+                </div>
+                <div class="col-2 orderdet p-2">
+                    Rs {{item.product.Price}} <br>
+                    <del style="font-size: 12px;"> Rs {{item.product.Price}}</del>
+                </div>
+                <div class=" col-2 orderdet p-2">
+                    Rs {{ item.product.Price|mul:item.quantity }}
+                    <br>
+            
+                    
+                </div>
+            </div>
+            {% endfor %}
+            <div class="row border-bottom align-items-center">
+
+                
+            </div>
+            <div class="row border-bottom align-items-center">
+
+               
+               
+            </div>
+            <div class="row border-bottom align-items-center">
+
+               
+            </div>
+            
+            <div class="row border-bottom align-items-center">
+
+                <div class="col-8 orderdet p-2">
+                    
+                </div>
+                <div class="col-2 orderdet p-2 cname" style="color: black;">
+                  Grand Total
+                </div>
+                <div class=" col-2 orderdet p-2 cname" style="color: black;"">
+                   Rs {{total}}
+                </div>
+
+                
+                
+            </div>
+          
+        <div class="table-responsive">
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block bodyened %}
+
+{% endblock %}
+
+

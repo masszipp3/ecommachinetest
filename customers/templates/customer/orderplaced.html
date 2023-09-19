@@ -1,0 +1,231 @@
+{% extends 'customer/index.html' %}
+{% load static %}
+
+{% block head %}
+{% csrf_token %}
+
+{% endblock %}
+
+{% block products %}
+
+<section class="section-content padding-y bg">
+    <div class="container">
+
+
+        
+        <!-- ============================ COMPONENT 2 ================================= -->
+        <div class="row">
+            <main class="col-md-8">
+                {% if not user.is_authenticated %}
+                <article class="card mb-4">
+                    <div class="card-body m-4">
+                        <h4 class="card-title mb-4">Login Or Register</h4>
+                        <div class="row" id="emailcheck" data-url="{% url 'customers:emailcheck' %}">
+                            <div class="col-12">
+                                <form class="" method="post" action="{% url 'customers:signup' %}?type=last" id="regform">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <input type="email" id="email" name="email" class="form-control"
+                                            placeholder="Email Address">
+                                    </div> <!-- form-group// -->
+                                    <div class="form-group" id="password" style="display: none;">
+                                        <input type="password" class="form-control" placeholder="Password">
+                                    </div>
+                                    <div class="form-group" style="display: none;">
+                                        <input type="password" name="password" class="form-control" placeholder="OTP">
+                                    </div> <!-- form-group// -->
+
+                                    <div class="form-group">
+                                        <a href="#" class="float-right">Forgot password?</a>
+
+                                    </div> <!-- form-group form-check .// -->
+                                    <div class="form-group" style="display: flex; justify-content: center;">
+                                        <button type="submit" id='loginbtn' class="btn btn-primary btn"
+                                            style="width: 50%;"> Login </button>
+                                    </div>
+                                    <div class="form-group" id="btnsend"
+                                        style="display: flex; justify-content: center;">
+                                        <button type="submit" id="sendotp" class="btn btn-primary btn"
+                                            style="width: 50%; display: none;"> Sign UP </button>
+                                    </div> <!-- form-group// -->
+                                </form>
+                            </div>
+
+                        </div>
+                    </div> <!-- card-body.// -->
+                </article>
+                {% endif %}
+                <!-- card.// -->
+
+
+                <!-- card.// -->
+                <form method="post">
+                    {% csrf_token %}
+
+                    <article class="card mb-4">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4">Address</h4>
+                            <a class="text-primary" data-toggle="modal" data-target="#exampleModal"> Add Address +</a>
+
+
+
+
+                            <div class="row">
+                                {% for address in addresses%}
+
+                                <div class="col-6">
+                                    <div class="card">
+                                        <input class="m-4" value="{{address.id}}" {% if forloop.counter == 1 %} checked {% endif %} type="radio" name="address">
+                                        <label class="p-4" for="">{{address.recipient_name}},{{address.street_address}},
+                                            {{address.city}}, {{address.apartment_suite}}, {{address.state}}
+                                            ,{{address.postal_code}}, {{address.phone_number}}
+                                        </label>
+                                    </div>
+                                </div>
+                                {% endfor %}
+
+
+                            </div> <!-- row.// -->
+
+                        </div> <!-- card-body.// -->
+                    </article>
+
+
+
+
+                    <article class="accordion" id="accordion_pay">
+
+                        <div class="card">
+                            <header class="card-header">
+                                <img src="{% static 'images/misc/cash.jpg' %}" class="float-right" height="24">
+                                <label class="form-check" data-toggle="collapse" data-target="#pay_payme">
+                                    <input class="form-check-input" name="payment-option" type="radio" checked
+                                        value="COD">
+                                    <h6 class="form-check-label"> Cash on Deivery</h6>
+                                </label>
+                            </header>
+                            <!-- collapse .// -->
+                        </div> <!-- card.// -->
+
+                    </article>
+                    <!-- accordion end.// -->
+                
+            </main> <!-- col.// -->
+            <aside class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+
+                        <dl class="dlist-align">
+                            <dt>Total:</dt>
+                            <dd class="text-right text-dark b" ><strong id="totalamount">{{total}}</strong></dd>
+                        </dl>
+                        <hr>
+                        <p class="text-center mb-3">
+                            <img src="{% static 'images/misc/payments.png' %}" height="26">
+                        </p>
+                        <button type="submit" class="btn btn-primary btn-block"> Place Order </button>
+
+
+
+                    </div> <!-- card-body.// -->
+                </div> <!-- card.// -->
+            </aside> <!-- col.// -->
+        </div>
+    </form>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <article class="card mb-4">
+                            <div class="card-body">
+                                <h4 class="card-title mb-4">Delivery info</h4>
+                                <form method="post" action="{% url 'customers:addaddress' %}">
+                                    {% csrf_token %}
+
+                                    <div class="row">
+
+
+                                        <div class="form-group col-sm-12">
+                                            <label>Full name</label>
+                                            <input type="text" name="name" placeholder="Type here" class="form-control">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label>Phone</label>
+                                            <input type="text" name="phone_number" value="+998" class="form-control">
+                                        </div>
+
+                                        <div class="form-group col-sm-6">
+                                            <label>Country*</label>
+                                            <select name="country" class="form-control">
+                                                <option value="India">India</option>
+                                                <option value="United States">United States</option>
+                                                <option value="France">France</option>
+                                                <option value="Italy">Italy</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label>State*</label>
+                                            <input type="text" name="state" placeholder="Type here"
+                                                class="form-control">
+                                        </div>
+                                        <div class="form-group col-sm-8">
+                                            <label>Street*</label>
+                                            <input type="text" name="street_address" placeholder="Type here"
+                                                class="form-control">
+                                        </div>
+                                        <div class="form-group col-sm-4">
+                                            <label>City</label>
+                                            <input type="text" name="city" placeholder="" class="form-control">
+                                        </div>
+                                        <div class="form-group col-sm-4">
+                                            <label>House</label>
+                                            <input type="text" name="house" placeholder="Type here"
+                                                class="form-control">
+                                        </div>
+                                        <div class="form-group col-sm-4">
+                                            <label>Postal code</label>
+                                            <input type="text" placeholder="" name="postal_code" class="form-control">
+                                        </div>
+                                        <div class="form-group col-sm-4">
+                                            <label>set default Address</label>
+                                            <input type="checkbox" placeholder="" name="default">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </article>
+
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- row.// -->
+
+        <!-- ============================ COMPONENT 2 END//  ================================= -->
+
+
+
+
+    </div> <!-- container .//  -->
+</section>
+
+{% endblock %}
+
+{% block bodyend %}
+
+{% endblock %}
